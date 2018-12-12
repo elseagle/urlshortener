@@ -1,6 +1,5 @@
 const mongoose = require('mongoose');
-const Schema = mongoose.Schema;
-
+const Counter = require("./Counter")
 
 // URL Collection Schema
 var urlSchema = new mongoose.Schema({
@@ -13,7 +12,7 @@ var urlSchema = new mongoose.Schema({
 // URL Schema pre-save step
 //
 // This is run BEFORE a new document is persisted in the URL collection. All
-// we are doing here is incrementing the counter in the Counter collection which
+// we are doing here is incrementing the Counter in the Counter collection which
 // then becomes the unique ID for the new document to be inserted in the URL
 // collection
 urlSchema.pre('save', function(next) {
@@ -30,4 +29,5 @@ urlSchema.pre('save', function(next) {
     });
 });
 
-module.exports = mongoose.model('URL', urlSchema);
+const Url= mongoose.model('url', urlSchema);
+module.exports = Url;

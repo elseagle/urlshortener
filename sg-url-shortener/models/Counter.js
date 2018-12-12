@@ -7,4 +7,4 @@ var countersSchema = new Schema({
     count: { type: Number, default: 0 }
 });
 
-module.exports = mongoose.model('Counter', countersSchema);
+module.exports = mongoose.model('counter', countersSchema);

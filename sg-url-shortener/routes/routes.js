@@ -1,7 +1,7 @@
 //Models Import
 const User = require('../models/User');
 const Token = require('../models/Token');
-const Url = require('../models/Url');
+const URL = require('../models/Url');
 const express = require("express")
 
 const router = express.Router();
@@ -11,16 +11,19 @@ const atob = require('atob');
 
 
 
-
 router.get('/', function(req, res){
     res.render('index')})
+
+router.post('/', (req, res) =>{
+    res.direct('/shorten')
+})
 
 
 
     
 // API for redirection
 router.get('/hash/:hash', function(req, res) {
-    var URL = new Url();
+    // var URL = new Url();
     var baseid = req.params.hash;
     if(baseid) {
         console.log('APP: Hash received: ' + baseid);
@@ -40,7 +43,9 @@ router.get('/hash/:hash', function(req, res) {
 
 // API for shortening
 router.post('/shorten', function(req, res, next) {
+    // var URL = new Url();
     var urlData = req.body.url;
+    // console.log(URL, urlData, Url())
     URL.findOne({url: urlData}, function(err, doc) {
         if(doc) {
             console.log('APP: URL found in DB');
