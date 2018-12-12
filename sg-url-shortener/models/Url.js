@@ -4,10 +4,10 @@ const Schema = mongoose.Schema;
 
 // URL Collection Schema
 var urlSchema = new mongoose.Schema({
-    _id: {type: Number},
+    _id: {type: Number, ref: "User"},
     url: '',
     created_at: '',
-    ref: "User"
+
 });
 
 // URL Schema pre-save step

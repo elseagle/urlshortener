@@ -10,8 +10,8 @@ if(process.env.NODE_ENV !== 'production') {
 }
 
 //MOdels import
-const Counter = require('/models/Count');
-const Url = require('/models/Url');
+const Counter = require('./models/Counter');
+const Url = require('./models/Url');
 
 
 // App variable initialization
@@ -22,8 +22,7 @@ var express = require('express'),
     app = express(),
     http = require('http').Server(app),
     mongoose = require('mongoose'),
-    btoa = require('btoa'),
-    atob = require('atob'),
+    
     // promise,
     connectionString = process.env.connectionString,
     port = process.env.PORT || 8234;
@@ -41,6 +40,18 @@ app.use(bodyParser.urlencoded({
     extended: true
 }));
 
+//HTML rendering
+const ejs = require("ejs");
+app.use(express.static('public'));
+app.use(bodyParser.urlencoded());
+app.set( "view engine", 'ejs');
+
+//Load Route
+const routes = require('./routes/routes');
+
+// Use Route
+app.use('/', routes);
+
 
 
 
@@ -54,12 +65,17 @@ promise = mongoose.connect(connectionString,
     useNewUrlParser: true }).then((db)=>{
     console.log('Mongo Connected');
 }).catch(error=> console.log(error))
+
 // promise = mongoose.connect(connectionString, 
-//     //     {
-//     //     auth: {
-//     //       user: '<cosmosdb-username>',
-//     //       password: '<cosmosdb-password>'
-//     //     }
+//         {
+//         auth: {
+//           user: '',
+//           password: ''
+//         },
+//     useNewUrlParser: true }).then((db)=>{
+//         console.log('Mongo Connected');
+//     }).catch(error=> console.log(error))
+
 //     //   }
 //       )
 //       .then(() => console.log('connection successful'))

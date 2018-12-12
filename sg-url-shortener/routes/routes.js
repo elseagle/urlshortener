@@ -1,20 +1,25 @@
 //Models Import
-const User = require('/models/User');
-const Token = require('/models/Token');
-const Counter = require('/models/Count');
-const Url = require('/models/Url');
+const User = require('../models/User');
+const Token = require('../models/Token');
+const Url = require('../models/Url');
+const express = require("express")
+
 const router = express.Router();
 const bcrypt = require('bcryptjs');
+const btoa = require('btoa');
+const atob = require('atob');
 
-// Base route for front-end
-app.get('/', function(req, res) {
-    res.sendFile('views/index.html', {
-        root: __dirname
-    });
-});
 
+
+
+router.get('/', function(req, res){
+    res.render('index')})
+
+
+
+    
 // API for redirection
-app.get('/:hash', function(req, res) {
+router.get('/hash/:hash', function(req, res) {
     var URL = new Url();
     var baseid = req.params.hash;
     if(baseid) {
@@ -34,7 +39,7 @@ app.get('/:hash', function(req, res) {
 });
 
 // API for shortening
-app.post('/shorten', function(req, res, next) {
+router.post('/shorten', function(req, res, next) {
     var urlData = req.body.url;
     URL.findOne({url: urlData}, function(err, doc) {
         if(doc) {
@@ -65,12 +70,14 @@ app.post('/shorten', function(req, res, next) {
     });
 });
 
-app.get('/registration', (req, res)=>{
+router.get('/registration', (req, res)=>{
 
-    res.sendFile("view/registration");
+    res.render("registration");
 })
 
-app.post('/register', (req, res)=> {
+
+
+router.post('/registration', (req, res)=> {
     const newUser = new User();
     newUser.email = req.body.email;
     newUser.password = req.body.password;
@@ -106,11 +113,11 @@ app.post('/register', (req, res)=> {
 })
 })
 
-app.get("/login", (req, res)=>{
-    res.sendFile("views/login")
+router.get("/login", (req, res)=>{
+    res.render("login")
 })
 
-app.post('/login', (req, res)=> {
+router.post('/login', (req, res)=> {
     User.findOne({email: req.body.email}).then(user => {
         if (user) {
             bcrypt.compare(req.body.password, user.password, (err, matched) => {
@@ -135,3 +142,6 @@ app.post('/login', (req, res)=> {
         }
     })
 });
+
+
+module.exports = router;
