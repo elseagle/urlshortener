@@ -19,13 +19,14 @@ const Url = require('./models/Url');
 // Note the connectionString is initialized from an environment variable
 var express = require('express'),
     bodyParser = require('body-parser'),
+ 
     app = express(),
     http = require('http').Server(app),
     mongoose = require('mongoose'),
     
     // promise,
     connectionString = process.env.connectionString,
-    port = process.env.PORT || 8234;
+    port = process.env.PORT || 4234;
 
    
 
@@ -43,7 +44,6 @@ app.use(bodyParser.urlencoded({
 //HTML rendering
 const ejs = require("ejs");
 app.use(express.static('public'));
-app.use(bodyParser.urlencoded());
 app.set( "view engine", 'ejs');
 
 //Load Route
@@ -93,7 +93,7 @@ promise.then(function(db) {
     Counter.remove({}, function() {
         console.log('APP: Counter collection emptied');
         console.log('APP: Initializing Counter collection with a default value');
-        var counter = new Counter({_id: 'url_count', count: 10000});
+        var counter = new Counter({_id: 'url_count', count: Math.random(10000, 90000) });
         counter.save(function(err) {
             if(err) {
                 console.error('APP: Error while initializing counter');

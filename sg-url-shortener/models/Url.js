@@ -3,7 +3,7 @@ const Counter = require("./Counter")
 
 // URL Collection Schema
 var urlSchema = new mongoose.Schema({
-    _id: {type: Number, ref: "User"},
+    _id: {type: String,},
     url: '',
     created_at: '',
 
@@ -18,7 +18,7 @@ var urlSchema = new mongoose.Schema({
 urlSchema.pre('save', function(next) {
     console.log('APP: Running pre-save');
     var that = this;
-    Counter.findByIdAndUpdate({ _id: 'url_count' }, { $inc: { count: 1 } }, function(err, counter) {
+    Counter.findByIdAndUpdate({ _id: 'url_count'}, { $inc: { count: 1 } }, function(err, counter) {
         if(err) {
             console.error('APP: Error while finding and updating counter value');
             return next(err)
