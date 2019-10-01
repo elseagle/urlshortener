@@ -12,11 +12,12 @@
     "dotenv": "^4.0.0",
     "ejs": "^2.6.1",
     "express": "^4.10.2",
-    "mongoose": "^4.13.7"
+    "mongoose": "^5.7.3",
+    "nodemon": "^1.19.3"
   },
   "main": "index.js",
   "scripts": {
-    "start": "node index.js"
+    "start": "nodemon index.js"
   },
   "engines": {
     "node": "4.8.4"

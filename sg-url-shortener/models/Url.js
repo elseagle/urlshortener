@@ -17,13 +17,13 @@ var urlSchema = new mongoose.Schema({
 // collection
 urlSchema.pre('save', function(next) {
     console.log('APP: Running pre-save');
-    var that = this;
-    Counter.findByIdAndUpdate({ _id: 'url_count'}, { $inc: { count: 1 } }, function(err, counter) {
+    let that = this;
+    Counter.findByIdAndUpdate({ _id: 'url_count'}, { $inc: { count: 1 } }, {useFindAndModify: false},(err, counter) => {
         if(err) {
             console.error('APP: Error while finding and updating counter value');
             return next(err)
         };
-        that._id = counter.count;
+        that._id = Counter.count;
         that.created_at = new Date();
         next();
     });
