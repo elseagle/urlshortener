@@ -2,13 +2,8 @@
 
 const URL = require('../models/Url');
 const express = require("express")
-
 const router = express.Router();
-// const bcrypt = require('bcryptjs');
-// // const btoa = require('btoa');
-// // const atob = require('atob');
-base32 = require("base-32").default;
-// const Buffer = require("buffer");
+const base32 = require("base-32").default;
 
 
 router.get('/', function(req, res){
@@ -18,14 +13,13 @@ router.post('/', (req, res) =>{
     res.direct('/shorten')
 })
 
-    
+
 // API for redirection
-router.get('/:hash', function(req, res) {
-    // var URL = new Url();
+router.get('/:hash', async (req, res) => {
     var baseid = req.params.hash;
     if(baseid) {
         console.log('APP: Hash received: ' + baseid);
-        var id = console.log(base32.decode(baseid));
+        var id =  await base32.decode(baseid);
         console.log('APP: Decoding Hash: ' + baseid);
         URL.findOne({ _id: id }, function(err, doc) {
             if(doc) {
@@ -39,34 +33,31 @@ router.get('/:hash', function(req, res) {
     }
 });
 
+
 // API for shortening
-router.post('/shorten', function(req, res, next) {
-    // var URL = new Url();
+router.post('/shorten', (req, res, next) => {
     var urlData = req.body.url;
-    // console.log(URL, urlData, Url())
-    URL.findOne({url: urlData}, function(err, doc) {
+    URL.findOne({url: urlData}, (err, doc) => {
         if(doc) {
-            console.log('APP: URL found in DB');
-            res.send({
-                url: urlData,
-                hash: base32.encode(doc._id),
-                //Buffer.from("encoded","base64" ).toString(doc._id),
-                status: 200,
-                statusTxt: 'OK'
+          console.log('APP: URL found in DB');
+          res.send({
+            url: urlData,
+            hash: base32.encode(doc._id),
+            status: 200,
+            statusTxt: 'OK',
             });
         } else {
             console.log('APP: URL not found in DB, creating new document');
             var url = new URL({
                 url: urlData
             });
-            url.save(function(err) {
+            url.save(err => {
                 if(err) {
                     return console.error(err);
                 }
                 res.send({
                     url: urlData,
                     hash: base32.encode(url._id),
-                    //Buffer.from("encoded","base64" ).toString(url._id),
                     status: 200,
                     statusTxt: 'OK'
                 });
